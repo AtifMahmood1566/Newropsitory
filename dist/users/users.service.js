@@ -41,19 +41,19 @@ let UsersService = class UsersService {
     async create(craeteUser) {
         const user = new this.userModel(craeteUser);
         let transporter = nodemailer.createTransport({
-            host: "smtp.ethereal.email",
+            host: "smtp.gmail.com",
             port: 587,
             secure: false,
             auth: {
-                user: 'amina.damore57@ethereal.email',
-                pass: 'eqUCSJqSR4w5FAapc3',
+                user: 'insightsquare59@gmail.com',
+                pass: 'insight@123',
             },
         });
         let info = await transporter.sendMail({
             from: 'atif@gmail.com',
             to: user.email,
             subject: "Hello ✔",
-            text: "Hello world?",
+            text: "Hello Tauqeer bhai",
             html: "<b>Hello world?</b>",
         });
         console.log("email info is : ", info);

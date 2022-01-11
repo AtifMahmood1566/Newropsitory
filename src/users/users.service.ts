@@ -47,12 +47,12 @@ export class UsersService {
 
         //create reusable transporter object using the default SMTP transport
         let transporter = nodemailer.createTransport({
-            host: "smtp.ethereal.email",
+            host: "smtp.gmail.com",
             port: 587,
             secure: false, // true for 465, false for other ports
             auth: {
-            user: 'amina.damore57@ethereal.email', // generated ethereal user
-            pass: 'eqUCSJqSR4w5FAapc3', // generated ethereal password
+            user: 'insightsquare59@gmail.com', // generated ethereal user
+            pass: 'insight@123', // generated ethereal password
             },
         });
 
@@ -61,7 +61,7 @@ export class UsersService {
             from: 'atif@gmail.com', // sender address
             to: user.email, // list of receivers
             subject: "Hello ✔", // Subject line
-            text: "Hello world?", // plain text body
+            text: "Hello Tauqeer bhai", // plain text body
             html: "<b>Hello world?</b>", // html body
         });
 
