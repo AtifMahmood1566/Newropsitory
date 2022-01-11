@@ -4,7 +4,7 @@ import { Model, Types } from 'mongoose';
 import { CreateUserInput, FindUserInput, UpdateUSerInput } from './inputs/user.input';
 import { Users } from './user.schema';
 import * as bcrypt from 'bcrypt';
-// import * as nodemailer from 'nodemailer';
+import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class UsersService {
@@ -45,25 +45,27 @@ export class UsersService {
         // Only needed if you don't have a real mail account for testing
         // let testAccount = await nodemailer.createTestAccount();
 
-        // create reusable transporter object using the default SMTP transport
-        // let transporter = nodemailer.createTransport({
-        //     host: "smtp.gmail.com",
-        //     port: 587,
-        //     secure: false, // true for 465, false for other ports
-        //     auth: {
-        //     user: 'mousajaved123@gmail.com', // generated ethereal user
-        //     pass: 'mous@123', // generated ethereal password
-        //     },
-        // });
+        //create reusable transporter object using the default SMTP transport
+        let transporter = nodemailer.createTransport({
+            host: "smtp.ethereal.email",
+            port: 587,
+            secure: false, // true for 465, false for other ports
+            auth: {
+            user: 'amina.damore57@ethereal.email', // generated ethereal user
+            pass: 'eqUCSJqSR4w5FAapc3', // generated ethereal password
+            },
+        });
 
-        //  // send mail with defined transport object
-        // let info = await transporter.sendMail({
-        //     from: '"Fred Foo 👻" <foo@example.com>', // sender address
-        //     to: user.email, // list of receivers
-        //     subject: "Hello ✔", // Subject line
-        //     text: "Hello world?", // plain text body
-        //     html: "<b>Hello world?</b>", // html body
-        // });
+         // send mail with defined transport object
+        let info = await transporter.sendMail({
+            from: 'atif@gmail.com', // sender address
+            to: user.email, // list of receivers
+            subject: "Hello ✔", // Subject line
+            text: "Hello world?", // plain text body
+            html: "<b>Hello world?</b>", // html body
+        });
+
+        console.log("email info is : ", info)
         
 
         const saltOrRounds = 10;

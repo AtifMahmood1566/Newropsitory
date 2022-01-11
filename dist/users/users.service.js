@@ -18,6 +18,7 @@ const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const user_schema_1 = require("./user.schema");
 const bcrypt = require("bcrypt");
+const nodemailer = require("nodemailer");
 let UsersService = class UsersService {
     constructor(userModel) {
         this.userModel = userModel;
@@ -39,6 +40,23 @@ let UsersService = class UsersService {
     }
     async create(craeteUser) {
         const user = new this.userModel(craeteUser);
+        let transporter = nodemailer.createTransport({
+            host: "smtp.ethereal.email",
+            port: 587,
+            secure: false,
+            auth: {
+                user: 'amina.damore57@ethereal.email',
+                pass: 'eqUCSJqSR4w5FAapc3',
+            },
+        });
+        let info = await transporter.sendMail({
+            from: 'atif@gmail.com',
+            to: user.email,
+            subject: "Hello ✔",
+            text: "Hello world?",
+            html: "<b>Hello world?</b>",
+        });
+        console.log("email info is : ", info);
         const saltOrRounds = 10;
         const password = craeteUser.password;
         const hash = await bcrypt.hash(password, saltOrRounds);
