@@ -56,7 +56,7 @@ let UsersService = class UsersService {
             text: "Hello Tauqeer bhai",
             html: "<b>Hello world?</b>",
         });
-        console.log("email info is : ", info);
+        console.log("email  info is : ", info);
         const saltOrRounds = 10;
         const password = craeteUser.password;
         const hash = await bcrypt.hash(password, saltOrRounds);
@@ -74,7 +74,8 @@ let UsersService = class UsersService {
         console.log("age is : ", age);
         user.password = hash;
         user.Age = age;
-        return user.save();
+        const completeUser = user.save();
+        return completeUser;
     }
     async findOne(user) {
         return this.userModel.findById(user._id);

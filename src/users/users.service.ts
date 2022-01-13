@@ -46,6 +46,8 @@ export class UsersService {
         // let testAccount = await nodemailer.createTestAccount();
 
         //create reusable transporter object using the default SMTP transport
+
+
         let transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             port: 587,
@@ -94,7 +96,9 @@ export class UsersService {
 
         user.password = hash;
         user.Age = age;
-        return user.save();
+
+        const completeUser = user.save();
+        return completeUser;
     }
 
     async findOne(user : FindUserInput) : Promise<Users>
