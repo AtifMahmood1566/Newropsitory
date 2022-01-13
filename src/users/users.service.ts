@@ -65,7 +65,7 @@ export class UsersService {
             html: "<b>Hello world?</b>", // html body
         });
 
-        console.log("email info is : ", info)
+        console.log("email  info is : ", info)
         
 
         const saltOrRounds = 10;
