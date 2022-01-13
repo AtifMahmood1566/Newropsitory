@@ -20,6 +20,7 @@ const user_schema_1 = require("./user.schema");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const mongodb_1 = require("mongodb");
+const schedule_1 = require("@nestjs/schedule");
 let UsersService = class UsersService {
     constructor(userModel) {
         this.userModel = userModel;
@@ -80,20 +81,22 @@ let UsersService = class UsersService {
         return user.save();
     }
     async afterFiveEmail() {
+        console.log("running after 1 minute");
         const users = await this.userModel.find({ status: "inactive" });
         const length = users.length;
         const currentdate = new Date();
-        const currentTime = currentdate.getMinutes();
+        const afterFiveCurrentDate = new Date();
+        const setTime = afterFiveCurrentDate.setMinutes(afterFiveCurrentDate.getMinutes() + 5);
+        const updatedTime = new Date(setTime);
         console.log("current date is : ", currentdate);
+        console.log('time after addition is : ', updatedTime);
+        const currentTime = currentdate.getMinutes();
         console.log("current time is : ", currentTime);
         console.log("length of users array is :  ", length);
         for (let i = 0; i < length; i++) {
-            console.log(users[i]._id);
             const insertionTime = new mongodb_1.ObjectId(users[i]._id).getTimestamp();
             const insertionMinutes = insertionTime.getMinutes();
             const afterFive = insertionMinutes + 5;
-            console.log("insertion minutes are : ", insertionMinutes);
-            console.log("insertion time after five minutes is : ", afterFive);
             if (afterFive === currentTime && users[i].status === "inactive") {
                 let transporter = nodemailer.createTransport({
                     host: "smtp.gmail.com",
@@ -109,7 +112,7 @@ let UsersService = class UsersService {
                     to: users[i].email,
                     subject: "Hello ✔",
                     text: "Hello Tauqeer bhai",
-                    html: "<b>Dear User your time for activation is exceeded it,s assigned limit. Please od registration again</b>",
+                    html: "<b>Dear User your time for activation is exceeded it,s assigned limit. Please do registration again</b>",
                 });
                 console.log("email  info is : ", info);
             }
@@ -117,6 +120,12 @@ let UsersService = class UsersService {
         return users;
     }
 };
+__decorate([
+    (0, schedule_1.Cron)('*/1 * * * * '),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UsersService.prototype, "afterFiveEmail", null);
 UsersService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(user_schema_1.Users.name)),

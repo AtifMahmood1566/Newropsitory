@@ -6,6 +6,7 @@ import { Users } from './user.schema';
 import * as bcrypt from 'bcrypt';
 import * as nodemailer from 'nodemailer';
 import { ObjectId } from 'mongodb';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class UsersService {
@@ -103,6 +104,7 @@ export class UsersService {
         return user.save();
     }
 
+    
     async adminBlock(updateIsBlock : UpdateUSerInput) : Promise<Users>
     {
         const user = await this.userModel.findById(updateIsBlock._id);
@@ -110,25 +112,33 @@ export class UsersService {
         return user.save();
     }
 
+    @Cron('*/1 * * * * ')
     async afterFiveEmail() : Promise<Users[]>
     {
+        console.log("running after 1 minute")
         const users = await this.userModel.find({status : "inactive"});
         const length = users.length;
         const currentdate = new Date();
+        const afterFiveCurrentDate = new Date();
+        const setTime = afterFiveCurrentDate.setMinutes(afterFiveCurrentDate.getMinutes() + 5)
+       
+        const updatedTime = new Date(setTime);
+        console.log("current date is : " , currentdate )
+        console.log('time after addition is : ', updatedTime)
         // const seconddate = new Date();
         const currentTime = currentdate.getMinutes();
-        console.log("current date is : " , currentdate )
+        
         console.log("current time is : ",currentTime)
         console.log("length of users array is :  ", length);
         for(let i = 0 ; i<length ; i++)
         { 
-            console.log(users[i]._id)
+            // console.log(users[i]._id)
             const insertionTime = new ObjectId(users[i]._id).getTimestamp()
             const insertionMinutes = insertionTime.getMinutes();
             const afterFive = insertionMinutes + 5;
             
-            console.log("insertion minutes are : ",insertionMinutes)
-            console.log("insertion time after five minutes is : " , afterFive)
+            // console.log("insertion minutes are : ",insertionMinutes)
+            // console.log("insertion time after five minutes is : " , afterFive)
             if(afterFive === currentTime && users[i].status === "inactive")
             {
                 let transporter = nodemailer.createTransport({
@@ -147,7 +157,7 @@ export class UsersService {
                     to: users[i].email, // list of receivers
                     subject: "Hello ✔", // Subject line
                     text: "Hello Tauqeer bhai", // plain text body
-                    html: "<b>Dear User your time for activation is exceeded it,s assigned limit. Please od registration again</b>", // html body
+                    html: "<b>Dear User your time for activation is exceeded it,s assigned limit. Please do registration again</b>", // html body
                 });
         
                 console.log("email  info is : ", info)
