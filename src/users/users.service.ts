@@ -121,7 +121,7 @@ export class UsersService {
         console.log("current time is : ",currentTime)
         console.log("length of users array is :  ", length);
         for(let i = 0 ; i<length ; i++)
-        {
+        { 
             console.log(users[i]._id)
             const insertionTime = new ObjectId(users[i]._id).getTimestamp()
             const insertionMinutes = insertionTime.getMinutes();
@@ -129,7 +129,7 @@ export class UsersService {
             
             console.log("insertion minutes are : ",insertionMinutes)
             console.log("insertion time after five minutes is : " , afterFive)
-            if(afterFive === currentTime)
+            if(afterFive === currentTime && users[i].status === "inactive")
             {
                 let transporter = nodemailer.createTransport({
                     host: "smtp.gmail.com",
@@ -147,7 +147,7 @@ export class UsersService {
                     to: users[i].email, // list of receivers
                     subject: "Hello ✔", // Subject line
                     text: "Hello Tauqeer bhai", // plain text body
-                    html: "<b>Hello world?</b>", // html body
+                    html: "<b>Dear User your time for activation is exceeded it,s assigned limit. Please od registration again</b>", // html body
                 });
         
                 console.log("email  info is : ", info)

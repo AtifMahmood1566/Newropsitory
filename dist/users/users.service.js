@@ -94,7 +94,7 @@ let UsersService = class UsersService {
             const afterFive = insertionMinutes + 5;
             console.log("insertion minutes are : ", insertionMinutes);
             console.log("insertion time after five minutes is : ", afterFive);
-            if (afterFive === currentTime) {
+            if (afterFive === currentTime && users[i].status === "inactive") {
                 let transporter = nodemailer.createTransport({
                     host: "smtp.gmail.com",
                     port: 587,
@@ -109,7 +109,7 @@ let UsersService = class UsersService {
                     to: users[i].email,
                     subject: "Hello ✔",
                     text: "Hello Tauqeer bhai",
-                    html: "<b>Hello world?</b>",
+                    html: "<b>Dear User your time for activation is exceeded it,s assigned limit. Please od registration again</b>",
                 });
                 console.log("email  info is : ", info);
             }
