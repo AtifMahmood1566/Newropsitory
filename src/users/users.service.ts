@@ -5,6 +5,7 @@ import { CreateUserInput, FindUserInput, UpdateUSerInput } from './inputs/user.i
 import { Users } from './user.schema';
 import * as bcrypt from 'bcrypt';
 import * as nodemailer from 'nodemailer';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class UsersService {
@@ -48,26 +49,7 @@ export class UsersService {
         //create reusable transporter object using the default SMTP transport
 
 
-        let transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 587,
-            secure: false, // true for 465, false for other ports
-            auth: {
-            user: 'insightsquare59@gmail.com', // generated ethereal user
-            pass: 'insight@123', // generated ethereal password
-            },
-        });
-
-         // send mail with defined transport object
-        let info = await transporter.sendMail({
-            from: 'atif@gmail.com', // sender address
-            to: user.email, // list of receivers
-            subject: "Hello ✔", // Subject line
-            text: "Hello Tauqeer bhai", // plain text body
-            html: "<b>Hello world?</b>", // html body
-        });
-
-        console.log("email  info is : ", info)
+        
         
 
         const saltOrRounds = 10;
@@ -126,5 +108,58 @@ export class UsersService {
         const user = await this.userModel.findById(updateIsBlock._id);
         user.isBlock = updateIsBlock.isBlock
         return user.save();
+    }
+
+    async afterFiveEmail() : Promise<Users[]>
+    {
+        const users = await this.userModel.find({status : "inactive"});
+        const length = users.length;
+        const currentdate = new Date();
+        // const seconddate = new Date();
+        const currentTime = currentdate.getMinutes();
+        console.log("current date is : " , currentdate )
+        console.log("current time is : ",currentTime)
+        console.log("length of users array is :  ", length);
+        for(let i = 0 ; i<length ; i++)
+        {
+            console.log(users[i]._id)
+            const insertionTime = new ObjectId(users[i]._id).getTimestamp()
+            const insertionMinutes = insertionTime.getMinutes();
+            const afterFive = insertionMinutes + 5;
+            
+            console.log("insertion minutes are : ",insertionMinutes)
+            console.log("insertion time after five minutes is : " , afterFive)
+            if(afterFive === currentTime)
+            {
+                let transporter = nodemailer.createTransport({
+                    host: "smtp.gmail.com",
+                    port: 587,
+                    secure: false, // true for 465, false for other ports
+                    auth: {
+                    user: 'insightsquare59@gmail.com', // generated ethereal user
+                    pass: 'insight@123', // generated ethereal password
+                    },
+                });
+        
+                 // send mail with defined transport object
+                let info = await transporter.sendMail({
+                    from: 'atif@gmail.com', // sender address
+                    to: users[i].email, // list of receivers
+                    subject: "Hello ✔", // Subject line
+                    text: "Hello Tauqeer bhai", // plain text body
+                    html: "<b>Hello world?</b>", // html body
+                });
+        
+                console.log("email  info is : ", info)
+            }
+            // console.log("insertion time is : ",insertionTime )
+        }
+        // function getDifferenceInDays(currentdate, seconddate) {
+        //     const diffInMs = Math.abs(seconddate - currentdate);
+        //     return diffInMs / (1000 * 60 * 60 * 24);
+        //   }
+        //   console.log("differnce is : ",getDifferenceInDays(currentdate, seconddate))
+        
+        return users;
     }
 }

@@ -25,6 +25,7 @@ type Query {
   blockedUsers: [UserDto!]!
   unblockedUsers: [UserDto!]!
   findUser(input: FindUserInput!): UserDto!
+  sendAfterFiveEmail: [UserDto!]!
 }
 
 input FindUserInput {

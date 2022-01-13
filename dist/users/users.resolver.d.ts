@@ -12,4 +12,5 @@ export declare class UsersResolver {
     findUser(input: FindUserInput): Promise<import("./user.schema").Users>;
     updateUser(input: UpdateUSerInput): Promise<import("./user.schema").Users>;
     adminBlockUSer(input: UpdateUSerInput): Promise<import("./user.schema").Users>;
+    sendAfterFiveEmail(): Promise<import("./user.schema").Users[]>;
 }

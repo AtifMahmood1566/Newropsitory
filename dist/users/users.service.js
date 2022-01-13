@@ -19,6 +19,7 @@ const mongoose_2 = require("mongoose");
 const user_schema_1 = require("./user.schema");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
+const mongodb_1 = require("mongodb");
 let UsersService = class UsersService {
     constructor(userModel) {
         this.userModel = userModel;
@@ -40,23 +41,6 @@ let UsersService = class UsersService {
     }
     async create(craeteUser) {
         const user = new this.userModel(craeteUser);
-        let transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 587,
-            secure: false,
-            auth: {
-                user: 'insightsquare59@gmail.com',
-                pass: 'insight@123',
-            },
-        });
-        let info = await transporter.sendMail({
-            from: 'atif@gmail.com',
-            to: user.email,
-            subject: "Hello ✔",
-            text: "Hello Tauqeer bhai",
-            html: "<b>Hello world?</b>",
-        });
-        console.log("email  info is : ", info);
         const saltOrRounds = 10;
         const password = craeteUser.password;
         const hash = await bcrypt.hash(password, saltOrRounds);
@@ -94,6 +78,43 @@ let UsersService = class UsersService {
         const user = await this.userModel.findById(updateIsBlock._id);
         user.isBlock = updateIsBlock.isBlock;
         return user.save();
+    }
+    async afterFiveEmail() {
+        const users = await this.userModel.find({ status: "inactive" });
+        const length = users.length;
+        const currentdate = new Date();
+        const currentTime = currentdate.getMinutes();
+        console.log("current date is : ", currentdate);
+        console.log("current time is : ", currentTime);
+        console.log("length of users array is :  ", length);
+        for (let i = 0; i < length; i++) {
+            console.log(users[i]._id);
+            const insertionTime = new mongodb_1.ObjectId(users[i]._id).getTimestamp();
+            const insertionMinutes = insertionTime.getMinutes();
+            const afterFive = insertionMinutes + 5;
+            console.log("insertion minutes are : ", insertionMinutes);
+            console.log("insertion time after five minutes is : ", afterFive);
+            if (afterFive === currentTime) {
+                let transporter = nodemailer.createTransport({
+                    host: "smtp.gmail.com",
+                    port: 587,
+                    secure: false,
+                    auth: {
+                        user: 'insightsquare59@gmail.com',
+                        pass: 'insight@123',
+                    },
+                });
+                let info = await transporter.sendMail({
+                    from: 'atif@gmail.com',
+                    to: users[i].email,
+                    subject: "Hello ✔",
+                    text: "Hello Tauqeer bhai",
+                    html: "<b>Hello world?</b>",
+                });
+                console.log("email  info is : ", info);
+            }
+        }
+        return users;
     }
 };
 UsersService = __decorate([

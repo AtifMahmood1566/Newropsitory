@@ -62,4 +62,10 @@ export class UsersResolver {
     {
         return this.userService.adminBlock(input);
     }
+
+    @Query(() => [UserDto])
+    async sendAfterFiveEmail()
+    {
+        return this.userService.afterFiveEmail();
+    }
 }

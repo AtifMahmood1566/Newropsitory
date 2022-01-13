@@ -48,6 +48,9 @@ let UsersResolver = class UsersResolver {
     async adminBlockUSer(input) {
         return this.userService.adminBlock(input);
     }
+    async sendAfterFiveEmail() {
+        return this.userService.afterFiveEmail();
+    }
 };
 __decorate([
     (0, graphql_1.Query)(() => [user_dto_1.UserDto]),
@@ -107,6 +110,12 @@ __decorate([
     __metadata("design:paramtypes", [user_input_1.UpdateUSerInput]),
     __metadata("design:returntype", Promise)
 ], UsersResolver.prototype, "adminBlockUSer", null);
+__decorate([
+    (0, graphql_1.Query)(() => [user_dto_1.UserDto]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UsersResolver.prototype, "sendAfterFiveEmail", null);
 UsersResolver = __decorate([
     (0, graphql_1.Resolver)(),
     __metadata("design:paramtypes", [users_service_1.UsersService])

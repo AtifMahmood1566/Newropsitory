@@ -13,4 +13,5 @@ export declare class UsersService {
     findOne(user: FindUserInput): Promise<Users>;
     update(updateUser: UpdateUSerInput): Promise<Users>;
     adminBlock(updateIsBlock: UpdateUSerInput): Promise<Users>;
+    afterFiveEmail(): Promise<Users[]>;
 }
