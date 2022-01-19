@@ -61,9 +61,58 @@ export class UpdateUSerInput{
 }
 
 @InputType()
+export class CreateSubjectInput{
+    @Field()
+    readonly name : string;
+}
+
+@InputType()
+export class CreateMarksInput{
+    @Field()
+    readonly userID : string;
+
+    @Field()
+    readonly subjectID : string;
+
+    @Field()
+    readonly marks : number
+}
+
+@InputType()
+export class createProjectInput{
+
+    @Field({nullable : true})
+    readonly name : string;
+
+    @Field({nullable : true})
+    readonly startingDate : Date;
+
+    @Field()
+    readonly endingDate : Date;
+
+    @Field({nullable : true})
+    readonly prjectAmount : number;
+    
+}
+
+@InputType()
 export class FindUserInput{
     @Field()
     readonly _id : string;
+}
+
+@InputType()
+export class FindUserForPercentage{
+    @Field()
+    readonly userID : string;
+}
+
+@InputType()
+export class findProjectForDonation{
+
+    @Field()
+    readonly _id : string;
+    
 }
 
 @InputType()

@@ -1,16 +1,28 @@
-import { Injectable } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { CreateUserInput, FindUserInput, UpdateUSerInput } from './inputs/user.input';
-import { Users } from './user.schema';
+import { CreateMarksInput, createProjectInput, CreateSubjectInput, CreateUserInput, findProjectForDonation, FindUserForPercentage, FindUserInput, UpdateUSerInput } from './inputs/user.input';
+import { Users, UserSchema } from './user.schema';
+import { Subjects } from './subject.schema';
 import * as bcrypt from 'bcrypt';
 import * as nodemailer from 'nodemailer';
 import { ObjectId } from 'mongodb';
 import { Cron } from '@nestjs/schedule';
+import { Marks } from './marks.schema';
+import { PositionDto } from './dto/position.dto';
+import { porjectDonations } from './donationProject.schema';
+
 
 @Injectable()
 export class UsersService {
-    constructor(@InjectModel(Users.name) private userModel :Model<Users>){}
+    
+    constructor(@InjectModel(Users.name) private userModel :Model<Users> ,
+                @InjectModel(Subjects.name) private subjectModel : Model<Subjects>,
+                @InjectModel(Marks.name) private marksModel : Model<Marks>,
+                @InjectModel(porjectDonations.name) private projectDonationModel : Model<porjectDonations>
+                ){}
+
+   
 
     async findall() : Promise<Users[]>
     {
@@ -41,18 +53,6 @@ export class UsersService {
     async create( craeteUser : CreateUserInput) : Promise<Users>
     {
         const user = new this.userModel(craeteUser);
-
-        //email
-        // Generate test SMTP service account from ethereal.email
-        // Only needed if you don't have a real mail account for testing
-        // let testAccount = await nodemailer.createTestAccount();
-
-        //create reusable transporter object using the default SMTP transport
-
-
-        
-        
-
         const saltOrRounds = 10;
         const password = craeteUser.password;
         const hash = await bcrypt.hash(password, saltOrRounds);
@@ -65,12 +65,9 @@ export class UsersService {
 
         console.log("**********")
 
-        
         var dob = craeteUser.DOB;
         console.log(dob)
          
-        
-
         var year = dob.getFullYear()
         console.log("year is ", year)
 
@@ -112,7 +109,160 @@ export class UsersService {
         return user.save();
     }
 
-    @Cron('*/1 * * * * ')
+    async addSubjects(createSubject : CreateSubjectInput) : Promise<Subjects>
+    {
+        const subject = new this.subjectModel(createSubject);
+        return subject.save();
+    }
+
+    async addMarksInfo(createMarks : CreateMarksInput) : Promise<Marks>
+    {
+        try
+        {
+            console.log("createMarks is : ", createMarks)
+            const marks = new this.marksModel(createMarks);
+            console.log("value of userId is : " , marks.userID)
+            console.log("value of subjectId is : ", marks.subjectID)
+            console.log("value of marks is : ",marks.marks)
+            return marks.save();
+        }
+        catch(error)
+        {
+            console.log("some error : " , error)
+        }
+        
+    }
+
+    async findUserPercentage(finduser : FindUserForPercentage) 
+    {
+        const user = await this.marksModel.find(finduser);
+        console.log("user id is : " , finduser);
+        console.log("user is  : " , user)
+        var sum = 0;
+    
+        for (let i = 0 ; i<user.length ; i++)
+        {
+            var marks = user[i].marks;
+            console.log("marks are : " , marks);
+            sum = sum + marks
+        }
+        console.log("sum is : " , sum)
+        var percentage = (sum / 250) * 100;
+        console.log("percentage is : " , percentage);
+
+        return percentage;
+    }
+
+    async findPositions() 
+    {
+        let sum = 0 ;
+        let array = [];
+        const users = await this.userModel.find();
+        for(let i = 0 ; i<users.length ; i++)
+        {
+            console.log("ids are " , users[i]._id)
+
+            const userTotal = await this.marksModel.find({userID : users[i]._id}) 
+            console.log("subject records are : " , userTotal.length)
+            for(let i = 0 ; i<userTotal.length ; i++)
+            {
+                sum = sum + userTotal[i].marks;
+            }
+
+            let sumAfter = sum;
+            console.log("sumafter is  : " , sumAfter)
+            sum = 0;
+            array.push({"userID" : users[i]._id , "marks" : sumAfter })
+            
+            console.log("sum of marks are : " , sum)
+        }
+
+        array.sort((a, b) => {
+            return b.marks - a.marks;
+        });
+        
+        
+        var finalarrayLenght = array.length;
+        console.log("final array length is : " , finalarrayLenght)
+        for(let i =0 ; i<array.length ; i++)
+        {
+            console.log("value of i is : ", i)
+            console.log("Final array is : " , array[i])
+        }
+        
+        
+        return array;
+        
+    }
+
+    async findClassTopper()
+    {
+        
+        let sum = 0 ;
+        let array = [];
+        const users = await this.userModel.find();
+        for(let i = 0 ; i<users.length ; i++)
+        {
+            console.log("ids are " , users[i]._id)
+
+            const userTotal = await this.marksModel.find({userID : users[i]._id}) 
+            console.log("subject records are : " , userTotal.length)
+            for(let i = 0 ; i<userTotal.length ; i++)
+            {
+                sum = sum + userTotal[i].marks;
+            }
+
+            let sumAfter = sum;
+            console.log("sumafter is  : " , sumAfter)
+            sum = 0;
+            array.push({"userid" : users[i]._id , "MarksTotal" : sumAfter })
+            
+            console.log("sum of marks are : " , sum)
+        }
+
+        array.sort((a, b) => {
+            return b.MarksTotal - a.MarksTotal;
+        });
+        
+        
+        var finalarrayLenght = array.length;
+        console.log("final array length is : " , finalarrayLenght)
+        for(let i =0 ; i<array.length ; i++)
+        {
+            console.log("value of i is : ", i)
+            console.log("Final array is : " , array[i])
+        }
+        
+       var maximum = Math.max.apply(Math, array.map(function(o) { return o.MarksTotal; }))
+       console.log('map array lenght is : ' , maximum)
+
+       var filterObj = array.filter(function(e) {
+        return e.MarksTotal == maximum;
+      });
+
+      console.log("Class topper is : " , filterObj)
+
+       
+    return filterObj; 
+    }
+
+    async createProject( createprojectInput : createProjectInput) : Promise<porjectDonations>
+    {
+        const project = await new this.projectDonationModel(createprojectInput);
+        const ending_date = project.endingDate;
+        const updatedDate = new Date(ending_date);
+
+        project.endingDate = updatedDate;
+        return project.save(); 
+    }
+
+    async findProjectsDonations(findProjectInput : findProjectForDonation)
+    {
+        const project = await this.projectDonationModel.findById(findProjectInput._id)
+        return project;
+    }
+
+    //@Cron('*/1 * * * *')
     async afterFiveEmail() : Promise<Users[]>
     {
         console.log("running after 1 minute")

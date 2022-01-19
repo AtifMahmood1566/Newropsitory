@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SendEmail = exports.FindUserInput = exports.UpdateUSerInput = exports.CreateUserInput = void 0;
+exports.SendEmail = exports.findProjectForDonation = exports.FindUserForPercentage = exports.FindUserInput = exports.createProjectInput = exports.CreateMarksInput = exports.CreateSubjectInput = exports.UpdateUSerInput = exports.CreateUserInput = void 0;
 const graphql_1 = require("@nestjs/graphql");
 const class_validator_1 = require("class-validator");
 let CreateUserInput = class CreateUserInput {
@@ -87,6 +87,56 @@ UpdateUSerInput = __decorate([
     (0, graphql_1.InputType)()
 ], UpdateUSerInput);
 exports.UpdateUSerInput = UpdateUSerInput;
+let CreateSubjectInput = class CreateSubjectInput {
+};
+__decorate([
+    (0, graphql_1.Field)(),
+    __metadata("design:type", String)
+], CreateSubjectInput.prototype, "name", void 0);
+CreateSubjectInput = __decorate([
+    (0, graphql_1.InputType)()
+], CreateSubjectInput);
+exports.CreateSubjectInput = CreateSubjectInput;
+let CreateMarksInput = class CreateMarksInput {
+};
+__decorate([
+    (0, graphql_1.Field)(),
+    __metadata("design:type", String)
+], CreateMarksInput.prototype, "userID", void 0);
+__decorate([
+    (0, graphql_1.Field)(),
+    __metadata("design:type", String)
+], CreateMarksInput.prototype, "subjectID", void 0);
+__decorate([
+    (0, graphql_1.Field)(),
+    __metadata("design:type", Number)
+], CreateMarksInput.prototype, "marks", void 0);
+CreateMarksInput = __decorate([
+    (0, graphql_1.InputType)()
+], CreateMarksInput);
+exports.CreateMarksInput = CreateMarksInput;
+let createProjectInput = class createProjectInput {
+};
+__decorate([
+    (0, graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], createProjectInput.prototype, "name", void 0);
+__decorate([
+    (0, graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Date)
+], createProjectInput.prototype, "startingDate", void 0);
+__decorate([
+    (0, graphql_1.Field)(),
+    __metadata("design:type", Date)
+], createProjectInput.prototype, "endingDate", void 0);
+__decorate([
+    (0, graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], createProjectInput.prototype, "prjectAmount", void 0);
+createProjectInput = __decorate([
+    (0, graphql_1.InputType)()
+], createProjectInput);
+exports.createProjectInput = createProjectInput;
 let FindUserInput = class FindUserInput {
 };
 __decorate([
@@ -97,6 +147,26 @@ FindUserInput = __decorate([
     (0, graphql_1.InputType)()
 ], FindUserInput);
 exports.FindUserInput = FindUserInput;
+let FindUserForPercentage = class FindUserForPercentage {
+};
+__decorate([
+    (0, graphql_1.Field)(),
+    __metadata("design:type", String)
+], FindUserForPercentage.prototype, "userID", void 0);
+FindUserForPercentage = __decorate([
+    (0, graphql_1.InputType)()
+], FindUserForPercentage);
+exports.FindUserForPercentage = FindUserForPercentage;
+let findProjectForDonation = class findProjectForDonation {
+};
+__decorate([
+    (0, graphql_1.Field)(),
+    __metadata("design:type", String)
+], findProjectForDonation.prototype, "_id", void 0);
+findProjectForDonation = __decorate([
+    (0, graphql_1.InputType)()
+], findProjectForDonation);
+exports.findProjectForDonation = findProjectForDonation;
 let SendEmail = class SendEmail {
 };
 __decorate([

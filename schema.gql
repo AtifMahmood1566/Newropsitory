@@ -2,6 +2,16 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type SubjectDto {
+  name: String!
+}
+
+type MarksDto {
+  userID: String!
+  subjectID: String!
+  marks: Float!
+}
+
 type UserDto {
   firstName: String!
   lastName: String!
@@ -18,6 +28,22 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type PercentageDto {
+  percentage: Float!
+}
+
+type PositionDto {
+  userID: String!
+  marks: Float!
+}
+
+type projectDonationDto {
+  name: String!
+  startingDate: DateTime!
+  endingDate: DateTime!
+  prjectAmount: Float!
+}
+
 type Query {
   users: [UserDto!]!
   activeUsers: [UserDto!]!
@@ -25,7 +51,6 @@ type Query {
   blockedUsers: [UserDto!]!
   unblockedUsers: [UserDto!]!
   findUser(input: FindUserInput!): UserDto!
-  sendAfterFiveEmail: [UserDto!]!
 }
 
 input FindUserInput {
@@ -36,6 +61,12 @@ type Mutation {
   createUser(input: CreateUserInput!): UserDto!
   updateUser(input: UpdateUSerInput!): UserDto!
   adminBlockUSer(input: UpdateUSerInput!): UserDto!
+  addSubject(input: CreateSubjectInput!): SubjectDto!
+  addMarks(input: CreateMarksInput!): MarksDto!
+  findPercentage(input: FindUserForPercentage!): PercentageDto!
+  findPosition: [PositionDto!]!
+  findToppers: PositionDto!
+  addProject(input: createProjectInput!): projectDonationDto!
 }
 
 input CreateUserInput {
@@ -56,4 +87,25 @@ input UpdateUSerInput {
   email: String
   password: String
   isBlock: Boolean
+}
+
+input CreateSubjectInput {
+  name: String!
+}
+
+input CreateMarksInput {
+  userID: String!
+  subjectID: String!
+  marks: Float!
+}
+
+input FindUserForPercentage {
+  userID: String!
+}
+
+input createProjectInput {
+  name: String
+  startingDate: DateTime
+  endingDate: DateTime
+  prjectAmount: Float
 }

@@ -17,13 +17,18 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const user_schema_1 = require("./user.schema");
+const subject_schema_1 = require("./subject.schema");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const mongodb_1 = require("mongodb");
-const schedule_1 = require("@nestjs/schedule");
+const marks_schema_1 = require("./marks.schema");
+const donationProject_schema_1 = require("./donationProject.schema");
 let UsersService = class UsersService {
-    constructor(userModel) {
+    constructor(userModel, subjectModel, marksModel, projectDonationModel) {
         this.userModel = userModel;
+        this.subjectModel = subjectModel;
+        this.marksModel = marksModel;
+        this.projectDonationModel = projectDonationModel;
     }
     async findall() {
         return this.userModel.find().exec();
@@ -80,6 +85,111 @@ let UsersService = class UsersService {
         user.isBlock = updateIsBlock.isBlock;
         return user.save();
     }
+    async addSubjects(createSubject) {
+        const subject = new this.subjectModel(createSubject);
+        return subject.save();
+    }
+    async addMarksInfo(createMarks) {
+        try {
+            console.log("createMarks is : ", createMarks);
+            const marks = new this.marksModel(createMarks);
+            console.log("value of userId is : ", marks.userID);
+            console.log("value of subjectId is : ", marks.subjectID);
+            console.log("value of marks is : ", marks.marks);
+            return marks.save();
+        }
+        catch (error) {
+            console.log("some error : ", error);
+        }
+    }
+    async findUserPercentage(finduser) {
+        const user = await this.marksModel.find(finduser);
+        console.log("user id is : ", finduser);
+        console.log("user is  : ", user);
+        var sum = 0;
+        for (let i = 0; i < user.length; i++) {
+            var marks = user[i].marks;
+            console.log("marks are : ", marks);
+            sum = sum + marks;
+        }
+        console.log("sum is : ", sum);
+        var percentage = (sum / 250) * 100;
+        console.log("percentage is : ", percentage);
+        return percentage;
+    }
+    async findPositions() {
+        let sum = 0;
+        let array = [];
+        const users = await this.userModel.find();
+        for (let i = 0; i < users.length; i++) {
+            console.log("ids are ", users[i]._id);
+            const userTotal = await this.marksModel.find({ userID: users[i]._id });
+            console.log("subject records are : ", userTotal.length);
+            for (let i = 0; i < userTotal.length; i++) {
+                sum = sum + userTotal[i].marks;
+            }
+            let sumAfter = sum;
+            console.log("sumafter is  : ", sumAfter);
+            sum = 0;
+            array.push({ "userID": users[i]._id, "marks": sumAfter });
+            console.log("sum of marks are : ", sum);
+        }
+        array.sort((a, b) => {
+            return b.marks - a.marks;
+        });
+        var finalarrayLenght = array.length;
+        console.log("final array length is : ", finalarrayLenght);
+        for (let i = 0; i < array.length; i++) {
+            console.log("value of i is : ", i);
+            console.log("Final array is : ", array[i]);
+        }
+        return array;
+    }
+    async findClassTopper() {
+        let sum = 0;
+        let array = [];
+        const users = await this.userModel.find();
+        for (let i = 0; i < users.length; i++) {
+            console.log("ids are ", users[i]._id);
+            const userTotal = await this.marksModel.find({ userID: users[i]._id });
+            console.log("subject records are : ", userTotal.length);
+            for (let i = 0; i < userTotal.length; i++) {
+                sum = sum + userTotal[i].marks;
+            }
+            let sumAfter = sum;
+            console.log("sumafter is  : ", sumAfter);
+            sum = 0;
+            array.push({ "userid": users[i]._id, "MarksTotal": sumAfter });
+            console.log("sum of marks are : ", sum);
+        }
+        array.sort((a, b) => {
+            return b.MarksTotal - a.MarksTotal;
+        });
+        var finalarrayLenght = array.length;
+        console.log("final array length is : ", finalarrayLenght);
+        for (let i = 0; i < array.length; i++) {
+            console.log("value of i is : ", i);
+            console.log("Final array is : ", array[i]);
+        }
+        var maximum = Math.max.apply(Math, array.map(function (o) { return o.MarksTotal; }));
+        console.log('map array lenght is : ', maximum);
+        var filterObj = array.filter(function (e) {
+            return e.MarksTotal == maximum;
+        });
+        console.log("Class topper is : ", filterObj);
+        return filterObj;
+    }
+    async createProject(createprojectInput) {
+        const project = await new this.projectDonationModel(createprojectInput);
+        const ending_date = project.endingDate;
+        const updatedDate = new Date(ending_date);
+        project.endingDate = updatedDate;
+        return project.save();
+    }
+    async findProjectsDonations(findProjectInput) {
+        const project = await this.projectDonationModel.findById(findProjectInput._id);
+        return project;
+    }
     async afterFiveEmail() {
         console.log("running after 1 minute");
         const users = await this.userModel.find({ status: "inactive" });
@@ -120,16 +230,16 @@ let UsersService = class UsersService {
         return users;
     }
 };
-__decorate([
-    (0, schedule_1.Cron)('*/1 * * * * '),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], UsersService.prototype, "afterFiveEmail", null);
 UsersService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(user_schema_1.Users.name)),
-    __metadata("design:paramtypes", [mongoose_2.Model])
+    __param(1, (0, mongoose_1.InjectModel)(subject_schema_1.Subjects.name)),
+    __param(2, (0, mongoose_1.InjectModel)(marks_schema_1.Marks.name)),
+    __param(3, (0, mongoose_1.InjectModel)(donationProject_schema_1.porjectDonations.name)),
+    __metadata("design:paramtypes", [mongoose_2.Model,
+        mongoose_2.Model,
+        mongoose_2.Model,
+        mongoose_2.Model])
 ], UsersService);
 exports.UsersService = UsersService;
 //# sourceMappingURL=users.service.js.map

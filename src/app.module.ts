@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { Users , UserSchema} from './users/user.schema';
 import { UsersModule } from './users/users.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { Marks, MarksSchema } from './users/marks.schema';
 
 @Module({
   imports: [UsersModule, GraphQLModule.forRoot({
@@ -17,6 +18,9 @@ import { ScheduleModule } from '@nestjs/schedule';
   MongooseModule.forRoot('mongodb+srv://atif:dbUserPassword@cluster0.x15aw.mongodb.net/ngm?retryWrites=true&w=majority'),
   MongooseModule.forFeature([{
   name: Users.name, schema: UserSchema
+}]),
+MongooseModule.forFeature([{
+  name: Marks.name, schema: MarksSchema
 }])
 ],
   controllers: [AppController],
