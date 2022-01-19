@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SendEmail = exports.findProjectForDonation = exports.FindUserForPercentage = exports.FindUserInput = exports.createProjectInput = exports.CreateMarksInput = exports.CreateSubjectInput = exports.UpdateUSerInput = exports.CreateUserInput = void 0;
+exports.SendEmail = exports.findProjectForDonation = exports.FindUserForPercentage = exports.updateInputForProjectDonation = exports.FindUserInput = exports.createProjectInput = exports.CreateMarksInput = exports.CreateSubjectInput = exports.UpdateUSerInput = exports.CreateUserInput = void 0;
 const graphql_1 = require("@nestjs/graphql");
 const class_validator_1 = require("class-validator");
 let CreateUserInput = class CreateUserInput {
@@ -133,6 +133,10 @@ __decorate([
     (0, graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
 ], createProjectInput.prototype, "prjectAmount", void 0);
+__decorate([
+    (0, graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], createProjectInput.prototype, "projectDonation", void 0);
 createProjectInput = __decorate([
     (0, graphql_1.InputType)()
 ], createProjectInput);
@@ -147,6 +151,20 @@ FindUserInput = __decorate([
     (0, graphql_1.InputType)()
 ], FindUserInput);
 exports.FindUserInput = FindUserInput;
+let updateInputForProjectDonation = class updateInputForProjectDonation {
+};
+__decorate([
+    (0, graphql_1.Field)(),
+    __metadata("design:type", String)
+], updateInputForProjectDonation.prototype, "_id", void 0);
+__decorate([
+    (0, graphql_1.Field)(),
+    __metadata("design:type", Number)
+], updateInputForProjectDonation.prototype, "projectDonation", void 0);
+updateInputForProjectDonation = __decorate([
+    (0, graphql_1.InputType)()
+], updateInputForProjectDonation);
+exports.updateInputForProjectDonation = updateInputForProjectDonation;
 let FindUserForPercentage = class FindUserForPercentage {
 };
 __decorate([

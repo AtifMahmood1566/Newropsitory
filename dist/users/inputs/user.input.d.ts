@@ -29,9 +29,14 @@ export declare class createProjectInput {
     readonly startingDate: Date;
     readonly endingDate: Date;
     readonly prjectAmount: number;
+    readonly projectDonation: number;
 }
 export declare class FindUserInput {
     readonly _id: string;
+}
+export declare class updateInputForProjectDonation {
+    readonly _id: string;
+    readonly projectDonation: number;
 }
 export declare class FindUserForPercentage {
     readonly userID: string;

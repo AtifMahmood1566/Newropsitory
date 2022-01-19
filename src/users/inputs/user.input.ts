@@ -92,6 +92,9 @@ export class createProjectInput{
 
     @Field({nullable : true})
     readonly prjectAmount : number;
+
+    @Field({nullable : true})
+    readonly projectDonation : number;
     
 }
 
@@ -99,6 +102,17 @@ export class createProjectInput{
 export class FindUserInput{
     @Field()
     readonly _id : string;
+}
+
+@InputType()
+export class updateInputForProjectDonation{
+
+    @Field()
+    readonly _id : string;
+
+    @Field()
+    readonly projectDonation : number;
+
 }
 
 @InputType()

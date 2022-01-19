@@ -80,6 +80,9 @@ let UsersResolver = class UsersResolver {
     async findProjectDonations(findProjectInput) {
         return await this.userService.findProjectsDonations(findProjectInput);
     }
+    async findProjectForDonation(projectDonationInput) {
+        return await this.userService.updateProjectDonations(projectDonationInput);
+    }
 };
 __decorate([
     (0, graphql_1.Query)(() => [user_dto_1.UserDto]),
@@ -186,6 +189,13 @@ __decorate([
     __metadata("design:paramtypes", [user_input_1.findProjectForDonation]),
     __metadata("design:returntype", Promise)
 ], UsersResolver.prototype, "findProjectDonations", null);
+__decorate([
+    (0, graphql_1.Mutation)(() => projectDonation_dto_1.projectDonationDto),
+    __param(0, (0, graphql_1.Args)('input')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_input_1.updateInputForProjectDonation]),
+    __metadata("design:returntype", Promise)
+], UsersResolver.prototype, "findProjectForDonation", null);
 UsersResolver = __decorate([
     (0, graphql_1.Resolver)(),
     __metadata("design:paramtypes", [users_service_1.UsersService])

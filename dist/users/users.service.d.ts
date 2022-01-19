@@ -1,5 +1,5 @@
 import { Model } from 'mongoose';
-import { CreateMarksInput, createProjectInput, CreateSubjectInput, CreateUserInput, findProjectForDonation, FindUserForPercentage, FindUserInput, UpdateUSerInput } from './inputs/user.input';
+import { CreateMarksInput, createProjectInput, CreateSubjectInput, CreateUserInput, findProjectForDonation, FindUserForPercentage, FindUserInput, updateInputForProjectDonation, UpdateUSerInput } from './inputs/user.input';
 import { Users } from './user.schema';
 import { Subjects } from './subject.schema';
 import { Marks } from './marks.schema';
@@ -26,6 +26,9 @@ export declare class UsersService {
     findClassTopper(): Promise<any[]>;
     createProject(createprojectInput: createProjectInput): Promise<porjectDonations>;
     findProjectsDonations(findProjectInput: findProjectForDonation): Promise<porjectDonations & {
+        _id: any;
+    }>;
+    updateProjectDonations(projectDonationInput: updateInputForProjectDonation): Promise<porjectDonations & {
         _id: any;
     }>;
     afterFiveEmail(): Promise<Users[]>;

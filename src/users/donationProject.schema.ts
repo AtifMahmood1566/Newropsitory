@@ -15,6 +15,9 @@ export class porjectDonations extends Document{
 
     @Prop({default : 0})
     prjectAmount : number;
+
+    @Prop({default : 0})
+    projectDonation : number;
 }
 
 export const porjectDonationsSchema = SchemaFactory.createForClass(porjectDonations);

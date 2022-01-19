@@ -190,6 +190,22 @@ let UsersService = class UsersService {
         const project = await this.projectDonationModel.findById(findProjectInput._id);
         return project;
     }
+    async updateProjectDonations(projectDonationInput) {
+        const projectDonations = await this.projectDonationModel.findById(projectDonationInput._id);
+        const endingDates = projectDonations.endingDate;
+        const currentDate = new Date();
+        console.log("ending date is : ", endingDates);
+        console.log("Current date is : ", currentDate);
+        if (projectDonationInput.projectDonation > projectDonations.prjectAmount || projectDonations.projectDonation > projectDonations.prjectAmount
+            || projectDonationInput.projectDonation + projectDonations.projectDonation > projectDonations.prjectAmount
+            || projectDonations.endingDate < currentDate) {
+            projectDonations.projectDonation = projectDonations.projectDonation;
+        }
+        else {
+            projectDonations.projectDonation = projectDonationInput.projectDonation + projectDonations.projectDonation;
+        }
+        return projectDonations.save();
+    }
     async afterFiveEmail() {
         console.log("running after 1 minute");
         const users = await this.userModel.find({ status: "inactive" });

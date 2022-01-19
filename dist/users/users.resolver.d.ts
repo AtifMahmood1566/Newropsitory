@@ -1,4 +1,4 @@
-import { CreateMarksInput, createProjectInput, CreateSubjectInput, CreateUserInput, findProjectForDonation, FindUserForPercentage, FindUserInput, UpdateUSerInput } from './inputs/user.input';
+import { CreateMarksInput, createProjectInput, CreateSubjectInput, CreateUserInput, findProjectForDonation, FindUserForPercentage, FindUserInput, updateInputForProjectDonation, UpdateUSerInput } from './inputs/user.input';
 import { UsersService } from './users.service';
 import { PercentageDto } from './dto/percnetage.dto';
 import { PositionDto } from './dto/position.dto';
@@ -21,6 +21,9 @@ export declare class UsersResolver {
     findToppers(): Promise<PositionDto>;
     addProject(createprojectInput: createProjectInput): Promise<import("./donationProject.schema").porjectDonations>;
     findProjectDonations(findProjectInput: findProjectForDonation): Promise<import("./donationProject.schema").porjectDonations & {
+        _id: any;
+    }>;
+    findProjectForDonation(projectDonationInput: updateInputForProjectDonation): Promise<import("./donationProject.schema").porjectDonations & {
         _id: any;
     }>;
 }

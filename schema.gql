@@ -42,6 +42,7 @@ type projectDonationDto {
   startingDate: DateTime!
   endingDate: DateTime!
   prjectAmount: Float!
+  projectDonation: Float!
 }
 
 type Query {
@@ -51,9 +52,14 @@ type Query {
   blockedUsers: [UserDto!]!
   unblockedUsers: [UserDto!]!
   findUser(input: FindUserInput!): UserDto!
+  findProjectDonations(input: findProjectForDonation!): projectDonationDto!
 }
 
 input FindUserInput {
+  _id: String!
+}
+
+input findProjectForDonation {
   _id: String!
 }
 
@@ -67,6 +73,7 @@ type Mutation {
   findPosition: [PositionDto!]!
   findToppers: PositionDto!
   addProject(input: createProjectInput!): projectDonationDto!
+  findProjectForDonation(input: updateInputForProjectDonation!): projectDonationDto!
 }
 
 input CreateUserInput {
@@ -106,6 +113,12 @@ input FindUserForPercentage {
 input createProjectInput {
   name: String
   startingDate: DateTime
-  endingDate: DateTime
+  endingDate: DateTime!
   prjectAmount: Float
+  projectDonation: Float
+}
+
+input updateInputForProjectDonation {
+  _id: String!
+  projectDonation: Float!
 }

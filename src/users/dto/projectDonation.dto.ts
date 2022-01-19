@@ -15,4 +15,7 @@ export class projectDonationDto{
 
     @Field()
     readonly prjectAmount : number;
+
+    @Field()
+    readonly projectDonation : number;
 }

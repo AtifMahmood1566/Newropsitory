@@ -2,7 +2,7 @@ import { Args, Mutation, Query ,Resolver } from '@nestjs/graphql';
 import { SubjectDto } from './dto/subject.dto';
 import { MarksDto } from './dto/marks.dto'
 import { UserDto } from './dto/user.dto';
-import { CreateMarksInput, createProjectInput, CreateSubjectInput, CreateUserInput, findProjectForDonation, FindUserForPercentage, FindUserInput, UpdateUSerInput } from './inputs/user.input';
+import { CreateMarksInput, createProjectInput, CreateSubjectInput, CreateUserInput, findProjectForDonation, FindUserForPercentage, FindUserInput, updateInputForProjectDonation, UpdateUSerInput } from './inputs/user.input';
 import { UsersService } from './users.service';
 import { PercentageDto } from './dto/percnetage.dto';
 import { PositionDto } from './dto/position.dto';
@@ -135,6 +135,12 @@ export class UsersResolver {
     async findProjectDonations(@Args('input') findProjectInput : findProjectForDonation)
     {
         return await this.userService.findProjectsDonations(findProjectInput);
+    }
+
+    @Mutation(() => projectDonationDto)
+    async findProjectForDonation(@Args('input') projectDonationInput : updateInputForProjectDonation)
+    {
+        return await this.userService.updateProjectDonations(projectDonationInput);
     }
 
 }
