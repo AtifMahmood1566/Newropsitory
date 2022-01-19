@@ -1,10 +1,15 @@
 import {Prop , Schema , SchemaFactory} from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { IsString , IsEmail} from 'class-validator';
+import { ObjectId } from 'mongodb';
 const uniqueValidator = require('mongoose-unique-validator')
 
 @Schema()
 export class Users extends Document{
+
+    // @Prop()
+    // _id : string;
+
     @IsString()
     @Prop()
     firstName : string;
